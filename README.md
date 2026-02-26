@@ -1,5 +1,5 @@
-
-> Readme is needed to be updated
+> [!IMPORTANT]
+> Readme is needed to be updated. To get an overview of the project and ideas to work on go through [arch.md](./arch.md).
 
 # Dont Compete
 
