@@ -47,6 +47,7 @@ describe("VaultManager", () => {
       await v2.close()
       await fs.rm(dir, { recursive: true, force: true })
       expect(events).toHaveLength(1)
+      expect(events[0]).toBeDefined()
       expect(events[0]!.vaultPath).toBe(dir)
       expect(typeof events[0]!.scanTimeMs).toBe("number")
     })
@@ -58,6 +59,7 @@ describe("VaultManager", () => {
       await vault.initializeVault(vaultPath)
       const notes = await vault.listNotes()
       expect(notes).toHaveLength(1)
+      expect(notes[0]).toBeDefined()
       expect(notes[0]!.note_id).toBe(meta.note_id)
     })
 
@@ -126,6 +128,7 @@ describe("VaultManager", () => {
       const { content } = await vault.readNote(meta.note_id)
       expect(content.trim()).toBe("updated body")
       const [updated] = await vault.listNotes()
+      expect(updated).toBeDefined()
       expect(updated!.embedding_status).toBe("stale")
     })
 
@@ -145,6 +148,7 @@ describe("VaultManager", () => {
       expect(await vault.listNotes()).toHaveLength(0)
       const trashed = await vault.listTrashedNotes()
       expect(trashed).toHaveLength(1)
+      expect(trashed[0]).toBeDefined()
       expect(trashed[0]!.note_id).toBe(meta.note_id)
     })
 
@@ -261,6 +265,7 @@ describe("VaultManager", () => {
       const events: NoteRenamedPayload[] = []
       vault.on(EVENTS.NOTE_RENAMED, (p: NoteRenamedPayload) => events.push(p))
       await vault.renameNote(meta.note_id, "Renamed")
+      expect(events[0]).toBeDefined()
       expect(events[0]!.oldDisplayName).toBe("Rename Event")
       expect(events[0]!.newDisplayName).toBe("Renamed")
     })
@@ -271,6 +276,7 @@ describe("VaultManager", () => {
       const events: NoteMovedPayload[] = []
       vault.on(EVENTS.NOTE_MOVED, (p: NoteMovedPayload) => events.push(p))
       await vault.moveNote(meta.note_id, "dest")
+      expect(events[0]).toBeDefined()
       expect(events[0]!.oldFolderPath).toBe("")
       expect(events[0]!.newFolderPath).toBe("dest")
     })
@@ -292,6 +298,7 @@ describe("VaultManager", () => {
       await vault.createNote("", "Note B", "", ["beta"])
       const results = await vault.searchByTags(["alpha"])
       expect(results).toHaveLength(1)
+      expect(results[0]).toBeDefined()
       expect(results[0]!.display_name).toBe("Note A")
     })
 
@@ -371,6 +378,7 @@ describe("VaultManager", () => {
       expect(renamed.name).toBe("new-name")
       expect(renamed.path).toBe("new-name")
       const notes = await vault.listNotes()
+      expect(notes[0]).toBeDefined()
       expect(notes[0]!.folder_path).toBe("new-name")
       await expect(fs.stat(path.join(vaultPath, "new-name"))).resolves.toBeTruthy()
       await expect(fs.stat(path.join(vaultPath, "old-name"))).rejects.toThrow()
@@ -383,9 +391,11 @@ describe("VaultManager", () => {
       const [parent] = await vault.listFolders("") as any[]
       await vault.renameFolder(parent.folder_id, "renamed-parent")
       const notes = await vault.listNotes()
+      expect(notes[0]).toBeDefined()
       expect(notes[0]!.folder_path).toBe("renamed-parent/child")
       const childFolders = await vault.listFolders("renamed-parent")
       expect(childFolders).toHaveLength(1)
+      expect(childFolders[0]).toBeDefined()
       expect(childFolders[0]!.path).toBe("renamed-parent/child")
     })
 
@@ -408,6 +418,7 @@ describe("VaultManager", () => {
       expect(moved.path).toBe("destination/source")
       expect(moved.parent_path).toBe("destination")
       const notes = await vault.listNotes()
+      expect(notes[0]).toBeDefined()
       expect(notes[0]!.folder_path).toBe("destination/source")
       await expect(
         fs.stat(path.join(vaultPath, "destination", "source"))
@@ -444,6 +455,7 @@ describe("VaultManager", () => {
       vault.on(EVENTS.FOLDER_MOVED, (p: FolderMovedPayload) => events.push(p))
       await vault.moveFolder(movable.folder_id, "target")
       expect(events).toHaveLength(1)
+      expect(events[0]).toBeDefined()
       expect(events[0]!.oldPath).toBe("movable")
       expect(events[0]!.newPath).toBe("target/movable")
     })
@@ -485,6 +497,7 @@ describe("VaultManager", () => {
       vault.on(EVENTS.FOLDER_CREATED, (p: FolderCreatedPayload) => events.push(p))
       await vault.createFolder("new-folder")
       expect(events).toHaveLength(1)
+      expect(events[0]).toBeDefined()
       expect(events[0]!.name).toBe("new-folder")
       expect(events[0]!.parent_path).toBe("")
     })
@@ -520,7 +533,9 @@ describe("VaultManager", () => {
       await vault.createNote("", "Zeta", "")
       await vault.createNote("", "Alpha", "")
       const notes = await vault.listNotes({ orderBy: "display_name", direction: "asc" })
+      expect(notes[0]).toBeDefined()
       expect(notes[0]!.display_name).toBe("Alpha")
+      expect(notes[1]).toBeDefined()
       expect(notes[1]!.display_name).toBe("Zeta")
     })
 
@@ -539,6 +554,7 @@ describe("VaultManager", () => {
       await vault.createNote("sub", "Sub Note", "")
       const sub = await vault.listNotes({ folderPath: "sub" })
       expect(sub).toHaveLength(1)
+      expect(sub[0]).toBeDefined()
       expect(sub[0]!.display_name).toBe("Sub Note")
     })
 
@@ -547,6 +563,7 @@ describe("VaultManager", () => {
       await vault.createNote("", "Gamma Delta", "")
       const results = await vault.searchNotes("alpha")
       expect(results).toHaveLength(1)
+      expect(results[0]).toBeDefined()
       expect(results[0]!.display_name).toBe("Alpha Beta")
     })
 

@@ -1,4 +1,5 @@
-import chokidar, { FSWatcher } from "chokidar"
+import chokidar from "chokidar"
+import type { FSWatcher } from "chokidar"
 import path from "path"
 import type { NoteID } from "./types"
 
@@ -78,6 +79,13 @@ export default class Watcher {
    */
   async stop(): Promise<void> {
     if (this.watcher) {
+      // Clear pending debounce timers
+      for (const timer of this.debounceTimers.values()) {
+        clearTimeout(timer)
+      }
+      this.debounceTimers.clear()
+      this.recentWrites.clear()
+
       await this.watcher.close()
       this.watcher = null
       this.handler = null
@@ -90,12 +98,14 @@ export default class Watcher {
    * This prevents the watcher from treating our own writes as external edits
    */
   markInternalWrite(relativePath: string): void {
+    // Normalize to POSIX so suppression keys match chokidar event paths
+    const normalizedPath = relativePath.split(path.sep).join("/")
     const expiryTime = Date.now() + this.suppressionWindow
-    this.recentWrites.set(relativePath, expiryTime)
+    this.recentWrites.set(normalizedPath, expiryTime)
 
     // Clean up after expiry
     setTimeout(() => {
-      this.recentWrites.delete(relativePath)
+      this.recentWrites.delete(normalizedPath)
     }, this.suppressionWindow)
   } 
 
@@ -170,7 +180,10 @@ export default class Watcher {
       `[Watcher] External ${type}: ${relativePath} (internal=${isInternal})`
     )
 
-    this.handler(event)
+    const result = this.handler(event)
+    if (result instanceof Promise) {
+      result.catch((err) => console.error("[Watcher] Handler error:", err))
+    }
   }
 
   /**

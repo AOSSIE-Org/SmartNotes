@@ -1,4 +1,5 @@
 import matter from "gray-matter"
+import yaml from "js-yaml"
 
 /**
  * Parse frontmatter from markdown content (DB-First approach)
@@ -40,7 +41,10 @@ export function stringifyFrontmatter(
     return content // No frontmatter, just content
   }
 
-  return matter.stringify(content, frontmatter)
+  // Use yaml.dump directly (js-yaml v4 removed safeDump; matter.stringify uses it)
+  const frontmatterStr = yaml.dump(frontmatter, { lineWidth: -1 }).trimEnd()
+  const body = content.startsWith("\n") ? content : `\n${content}`
+  return `---\n${frontmatterStr}\n---${body}`
 }
 
 /**

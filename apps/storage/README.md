@@ -1,3 +1,5 @@
+# Smart Notes Storage
+
 What it does — in plain terms
 Vault (the notes folder)
 Open any folder as a vault
