@@ -44,6 +44,21 @@ jobs:
                 color: 'D73A4A', 
                 description: 'PR is not linked to any issue' 
               },
+              {
+                name: 'pending-coderabbit-review',
+                color: 'FBCA04',
+                description: 'Waiting for CodeRabbit review'
+              },
+              {
+                name: 'template_sync',
+                color: 'BFDADC',
+                description: 'Automated template synchronization PR'
+              },
+              {
+                name: 'auto_pr',
+                color: '5319E7',
+                description: 'Automatically created pull request'
+              },
               
               // ==================== FILE TYPE LABELS ====================
               { 
