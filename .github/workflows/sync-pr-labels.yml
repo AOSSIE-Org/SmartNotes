@@ -289,7 +289,7 @@ jobs:
                 });
                 
                 if (['admin', 'maintain'].includes(permissionLevel.data.permission)) {
-                  contributorLabels.push('org-Member');
+                  contributorLabels.push('org-member');
                   isMaintainer = true;
                 }
               } catch (error) {
