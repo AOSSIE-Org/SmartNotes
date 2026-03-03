@@ -1,0 +1,235 @@
+/* ── Reset ────────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── App root ─────────────────────────────────────────────────────────── */
+.app-root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  font-family: Inter, system-ui, sans-serif;
+  transition: background 0.2s, color 0.2s;
+}
+
+.app-root.dark {
+  background: #1f1f1f;
+  color: #cfcfcf;
+}
+
+.app-root.light {
+  background: #ffffff;
+  color: #222222;
+}
+
+/* ── Top bar ──────────────────────────────────────────────────────────── */
+.topbar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  height: 48px;
+  border-bottom: 1px solid;
+  z-index: 100;
+}
+
+.dark .topbar {
+  background: #161616;
+  border-color: #2a2a2a;
+}
+
+.light .topbar {
+  background: #f5f5f5;
+  border-color: #e0e0e0;
+}
+
+/* ── Dropdown button ──────────────────────────────────────────────────── */
+.topbar-left {
+  position: relative;
+}
+
+.dropdown-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  line-height: 1;
+  transition: background 0.15s;
+}
+
+.dark .dropdown-btn {
+  background: #2a2a2a;
+  border-color: #3a3a3a;
+  color: #cfcfcf;
+}
+
+.dark .dropdown-btn:hover {
+  background: #333;
+}
+
+.light .dropdown-btn {
+  background: #fff;
+  border-color: #d0d0d0;
+  color: #222;
+}
+
+.light .dropdown-btn:hover {
+  background: #f0f0f0;
+}
+
+.dropdown-icon {
+  font-size: 15px;
+  opacity: 0.7;
+}
+
+.chevron {
+  font-size: 10px;
+  opacity: 0.5;
+  margin-left: 2px;
+}
+
+/* ── Dropdown menu ────────────────────────────────────────────────────── */
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 180px;
+  border-radius: 8px;
+  border: 1px solid;
+  list-style: none;
+  padding: 4px;
+  z-index: 200;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.dark .dropdown-menu {
+  background: #1f1f1f;
+  border-color: #2a2a2a;
+}
+
+.light .dropdown-menu {
+  background: #fff;
+  border-color: #e0e0e0;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.1s;
+}
+
+.dark .dropdown-item:hover {
+  background: #2a2a2a;
+}
+
+.light .dropdown-item:hover {
+  background: #f0f0f0;
+}
+
+.dropdown-item.active {
+  font-weight: 600;
+}
+
+.check {
+  color: #6366f1;
+  font-size: 12px;
+}
+
+/* ── Theme toggle ─────────────────────────────────────────────────────── */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  line-height: 1;
+  transition: background 0.15s;
+}
+
+.dark .theme-toggle {
+  background: #2a2a2a;
+  border-color: #3a3a3a;
+  color: #cfcfcf;
+}
+
+.dark .theme-toggle:hover {
+  background: #333;
+}
+
+.light .theme-toggle {
+  background: #fff;
+  border-color: #d0d0d0;
+  color: #222;
+}
+
+.light .theme-toggle:hover {
+  background: #f0f0f0;
+}
+
+/* ── Editor area ──────────────────────────────────────────────────────── */
+.editor-area {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Make BlockNoteView fill the full editor area */
+.editor-area .bn-container,
+.editor-area .bn-editor {
+  flex: 1;
+  height: 100%;
+}
+
+.editor-area .bn-full {
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Heading spacing fix (same as apps/editor) ────────────────────────── */
+.bn-editor .bn-block-content[data-content-type="heading"] {
+  line-height: 1.2;
+  padding: 4px 0;
+}
+
+.bn-editor .bn-block-content[data-content-type="heading"][data-level="1"] {
+  padding-top: 8px;
+  padding-bottom: 4px;
+}
+
+.bn-editor .bn-block-content[data-content-type="heading"][data-level="2"] {
+  padding-top: 6px;
+  padding-bottom: 3px;
+}
+
+.bn-editor .bn-block-content[data-content-type="heading"][data-level="3"] {
+  padding-top: 4px;
+  padding-bottom: 2px;
+}
+
+.bn-editor .bn-block-content[data-content-type="heading"] .bn-inline-content {
+  line-height: 1.2;
+}
