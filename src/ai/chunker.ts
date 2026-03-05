@@ -27,7 +27,8 @@ export function chunkMarkdown(
     markdown: string,
     maxWords: number = 250
 ): Chunk[] {
-    maxWords = Math.max(1, maxWords);
+    const normalizedMaxWords =
+        Number.isFinite(maxWords) ? Math.max(1, Math.floor(maxWords)) : 1;
 
     if (!markdown || !markdown.trim()) {
         return [];
@@ -44,7 +45,7 @@ export function chunkMarkdown(
             continue;
         }
 
-        if (words.length <= maxWords) {
+        if (words.length <= normalizedMaxWords) {
             chunks.push({
                 id: `${noteId}_chunk_${index}`,
                 noteId,
@@ -52,8 +53,10 @@ export function chunkMarkdown(
             });
             index++;
         } else {
-            for (let i = 0; i < words.length; i += maxWords) {
-                const content = words.slice(i, i + maxWords).join(" ");
+            for (let i = 0; i < words.length; i += normalizedMaxWords) {
+                const content = words
+                    .slice(i, i + normalizedMaxWords)
+                    .join(" ");
                 chunks.push({
                     id: `${noteId}_chunk_${index}`,
                     noteId,

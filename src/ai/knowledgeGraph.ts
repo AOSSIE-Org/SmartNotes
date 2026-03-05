@@ -9,7 +9,7 @@ export interface KnowledgeGraph {
 export function buildKnowledgeGraph(
     notes: Record<string, string>
 ): KnowledgeGraph {
-    const graph: KnowledgeGraph = {};
+    const graph: KnowledgeGraph = Object.create(null) as KnowledgeGraph;
 
     for (const [noteName, content] of Object.entries(notes)) {
         const links = extractWikiLinks(content);
@@ -29,11 +29,11 @@ export function buildKnowledgeGraph(
 export function getBacklinks(
     graph: KnowledgeGraph
 ): Record<string, string[]> {
-    const backlinks: Record<string, string[]> = {};
+    const backlinks: Record<string, string[]> = Object.create(null);
 
     for (const [noteName, links] of Object.entries(graph)) {
         for (const target of links) {
-            if (!backlinks[target]) {
+            if (!Object.prototype.hasOwnProperty.call(backlinks, target)) {
                 backlinks[target] = [];
             }
             backlinks[target].push(noteName);
