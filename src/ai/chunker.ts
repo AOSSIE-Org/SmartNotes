@@ -10,7 +10,7 @@ export interface Chunk {
     id: string;
     noteId: string;
     content: string;
-    metadata?: Record<string, any>
+    metadata?: Record<string, unknown>
 }
 
 /**
@@ -27,6 +27,8 @@ export function chunkMarkdown(
     markdown: string,
     maxWords: number = 250
 ): Chunk[] {
+    maxWords = Math.max(1, maxWords);
+
     if (!markdown || !markdown.trim()) {
         return [];
     }

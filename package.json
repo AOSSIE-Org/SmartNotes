@@ -2,8 +2,8 @@
   "name": "smartnotes",
   "version": "0.1.0",
   "description": "AI-powered smart notes with semantic search and knowledge graph features",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/ai/index.js",
+  "types": "dist/ai/index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "jest",

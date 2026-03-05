@@ -12,7 +12,8 @@ export function buildKnowledgeGraph(
     const graph: KnowledgeGraph = {};
 
     for (const [noteName, content] of Object.entries(notes)) {
-        graph[noteName] = extractWikiLinks(content);
+        const links = extractWikiLinks(content);
+        graph[noteName] = [...new Set(links)];
     }
 
     return graph;

@@ -1,6 +1,17 @@
 import { buildKnowledgeGraph, getBacklinks } from "../knowledgeGraph";
 
 describe("buildKnowledgeGraph", () => {
+    test("handles aliased wiki links", () => {
+        const notes = {
+            A: "See [[B|Beta]] and [[C|Gamma]]",
+            B: "Note B",
+            C: "Note C",
+        };
+
+        const graph = buildKnowledgeGraph(notes);
+        expect(graph["A"]).toEqual(["B", "C"]);
+    });
+
     test("builds note graph from wiki links", () => {
         const notes = {
             A: "See [[B]]",
@@ -54,6 +65,17 @@ describe("buildKnowledgeGraph", () => {
 
         expect(graph["A"]).toEqual(["B"]);
         expect(graph["B"]).toEqual(["A"]);
+    });
+
+    test("deduplicates multiple links to the same note", () => {
+        const notes = {
+            A: "See [[B]] here and also [[B]] there",
+        };
+
+        const graph = buildKnowledgeGraph(notes);
+
+        expect(graph["A"]).toEqual(["B"]);
+        expect(graph["A"].length).toBe(1);
     });
 });
 

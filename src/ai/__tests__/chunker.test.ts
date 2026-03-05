@@ -21,6 +21,7 @@ describe("chunkMarkdown", () => {
         expect(chunks.length).toBe(1);
         expect(chunks[0].content).toBe("Hello world");
         expect(chunks[0].id).toBe("note1_chunk_0");
+        expect(chunks[0].noteId).toBe("note1");
     });
 
     test("preserves content across chunks", () => {
@@ -83,5 +84,16 @@ describe("chunkMarkdown", () => {
         expect(chunks.length).toBe(2);
         expect(chunks[0].content).toContain("Preamble");
         expect(chunks[1].content).toContain("First Heading");
+    });
+
+    test("guards against maxWords <= 0 to prevent infinite loop", () => {
+        const text = "one two three";
+        const chunksZero = chunkMarkdown("note1", text, 0);
+        expect(chunksZero.length).toBe(3);
+        expect(chunksZero[0].content).toBe("one");
+
+        const chunksNegative = chunkMarkdown("note1", text, -5);
+        expect(chunksNegative.length).toBe(3);
+        expect(chunksNegative[2].content).toBe("three");
     });
 });

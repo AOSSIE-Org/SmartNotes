@@ -15,8 +15,12 @@ export function getRelatedNotes(
 
   const related = new Set<string>();
 
-  outgoing.forEach(n => related.add(n));
-  backlinks.forEach(n => related.add(n));
+  outgoing.forEach((n) => {
+    related.add(n);
+  });
+  backlinks.forEach((n) => {
+    related.add(n);
+  });
 
   return Array.from(related).filter(n => n !== noteName);
 }
