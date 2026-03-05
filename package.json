@@ -1,0 +1,27 @@
+{
+  "name": "smartnotes",
+  "version": "0.1.0",
+  "description": "AI-powered smart notes with semantic search and knowledge graph features",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "test:coverage": "jest --coverage"
+  },
+  "keywords": [
+    "notes",
+    "ai",
+    "semantic-search",
+    "knowledge-graph",
+    "markdown"
+  ],
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.7.3"
+  }
+}

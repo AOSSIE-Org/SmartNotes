@@ -1,3 +1,9 @@
+## Node.js / TypeScript
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
