@@ -144,6 +144,8 @@ describe("SemanticSearchService", () => {
                 noteId: "cooking-note",
                 minScore: 0,
             });
+            // Assert non-empty first — results.every() is vacuously true on []
+            expect(results.length).toBeGreaterThan(0);
             expect(results.every((r) => r.chunk.noteId === "cooking-note")).toBe(true);
         });
 
@@ -170,9 +172,12 @@ describe("SemanticSearchService", () => {
             await service.indexNote("cooking", "How to make the perfect pasta recipe.");
 
             const related = await service.findRelatedNotes("ml-intro", 5);
-            if (related.length > 0) {
-                expect(related[0].chunk.noteId).toBe("ml-advanced");
-            }
+            const noteIds = related.map((r) => r.chunk.noteId);
+
+            // Unconditional — must return results, not guarded by if()
+            expect(related.length).toBeGreaterThan(0);
+            expect(noteIds).toContain("ml-advanced");
+            expect(noteIds).not.toContain("cooking");
         });
     });
 
