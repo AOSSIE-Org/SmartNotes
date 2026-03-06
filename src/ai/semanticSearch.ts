@@ -47,12 +47,15 @@ export class SemanticSearchService {
 
     /** Index a note. Replaces any previously indexed chunks for this noteId. */
     async indexNote(noteId: string, content: string): Promise<number> {
-        this.vectorStore.removeByNoteId(noteId);
-
         const chunks = this.chunkFn(noteId, content);
-        if (chunks.length === 0) return 0;
+        if (chunks.length === 0) {
+            this.vectorStore.removeByNoteId(noteId);
+            return 0;
+        }
 
+        // Embed first — if this throws, the old index is left intact.
         const embeddedChunks = await this.embeddingService.embedChunks(chunks);
+        this.vectorStore.removeByNoteId(noteId);
         this.vectorStore.add(embeddedChunks);
 
         return chunks.length;
