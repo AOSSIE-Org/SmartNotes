@@ -15,7 +15,7 @@ export interface EmbeddedChunk {
 
 export interface SearchResult {
     chunk: TextChunk;
-    /** Cosine similarity, 0 to 1. */
+    /** Cosine similarity score (-1 to 1; typically >= 0 for normalized embeddings). */
     score: number;
 }
 
