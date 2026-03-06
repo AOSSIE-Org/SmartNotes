@@ -158,6 +158,17 @@ export class VectorStore {
         return false;
     }
 
+    /** Return all chunks for a note without any vector math. */
+    getChunksByNoteId(noteId: string): TextChunk[] {
+        const chunks: TextChunk[] = [];
+        for (const entry of this.entries.values()) {
+            if (entry.chunk.noteId === noteId) {
+                chunks.push(entry.chunk);
+            }
+        }
+        return chunks;
+    }
+
     clear(): void {
         this.entries.clear();
         this.dirty = true;

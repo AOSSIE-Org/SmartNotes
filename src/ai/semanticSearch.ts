@@ -117,9 +117,6 @@ export class SemanticSearchService {
     }
 
     private getAllChunksForNote(noteId: string): TextChunk[] {
-        // Workaround: search with zero vector + no min score to get all chunks for a note
-        const dummyVector = new Array(384).fill(0);
-        const results = this.vectorStore.search(dummyVector, 1000, -1, noteId);
-        return results.map((r) => r.chunk);
+        return this.vectorStore.getChunksByNoteId(noteId);
     }
 }
