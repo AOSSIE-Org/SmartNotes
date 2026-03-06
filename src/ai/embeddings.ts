@@ -40,20 +40,27 @@ export class EmbeddingService {
         if (this.initPromise) return this.initPromise;
 
         this.initPromise = (async () => {
-            const pipeline = await getPipeline();
-            const extractor = await pipeline(
-                "feature-extraction",
-                this.config.modelId,
-                { dtype: "fp32" },
-            );
+            try {
+                const pipeline = await getPipeline();
+                const extractor = await pipeline(
+                    "feature-extraction",
+                    this.config.modelId,
+                    { dtype: "fp32" },
+                );
 
-            this.embedFn = async (texts: string[]): Promise<number[][]> => {
-                const output = await extractor(texts, {
-                    pooling: "mean",
-                    normalize: true,
-                });
-                return output.tolist() as number[][];
-            };
+                this.embedFn = async (texts: string[]): Promise<number[][]> => {
+                    const output = await extractor(texts, {
+                        pooling: "mean",
+                        normalize: true,
+                    });
+                    return output.tolist() as number[][];
+                };
+            } catch (error) {
+                // Clear so the next initialize() call can retry instead of
+                // returning this cached rejected Promise forever.
+                this.initPromise = null;
+                throw error;
+            }
         })();
 
         return this.initPromise;
