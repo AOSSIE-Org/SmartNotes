@@ -94,9 +94,12 @@ export class VectorStore {
     async save(): Promise<void> {
         if (!this.dirty) return;
 
+        const allEntries = Array.from(this.entries.values());
         const serialized: SerializedVectorStore = {
             version: CURRENT_VERSION,
-            entries: Array.from(this.entries.values()).map((e) => ({
+            modelId: this.config.modelId,
+            vectorDim: allEntries.length > 0 ? allEntries[0].vector.length : undefined,
+            entries: allEntries.map((e) => ({
                 chunk: e.chunk,
                 vector: e.vector,
             })),
@@ -112,7 +115,7 @@ export class VectorStore {
         this.dirty = false;
     }
 
-    /** Load from disk. Returns false if no index file exists. */
+    /** Load from disk. Returns false if no index file exists. Throws on model mismatch. */
     async load(): Promise<boolean> {
         const filePath = join(this.config.persistDir, this.config.indexFilename);
         if (!existsSync(filePath)) return false;
@@ -125,6 +128,24 @@ export class VectorStore {
                 `VectorStore: version mismatch (got ${data.version}, ` +
                 `expected ${CURRENT_VERSION}). Rebuild recommended.`,
             );
+        }
+
+        // Fail fast on model mismatch rather than propagating bad vectors to search.
+        if (data.modelId && this.config.modelId && data.modelId !== this.config.modelId) {
+            throw new Error(
+                `VectorStore: index was built with model "${data.modelId}" ` +
+                `but current model is "${this.config.modelId}". ` +
+                `Delete the index file to rebuild.`,
+            );
+        }
+        if (data.vectorDim !== undefined && data.entries.length > 0) {
+            const actualDim = data.entries[0].vector.length;
+            if (actualDim !== data.vectorDim) {
+                throw new Error(
+                    `VectorStore: index vectorDim mismatch ` +
+                    `(stored ${data.vectorDim}, found ${actualDim}). Index may be corrupted.`,
+                );
+            }
         }
 
         this.entries.clear();

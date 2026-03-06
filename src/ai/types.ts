@@ -28,10 +28,16 @@ export interface EmbeddingConfig {
 export interface VectorStoreConfig {
     persistDir: string;
     indexFilename: string;
+    /** Used to detect incompatible index files at load time. */
+    modelId?: string;
 }
 
 export interface SerializedVectorStore {
     version: number;
+    /** Model that produced the stored vectors. */
+    modelId?: string;
+    /** Embedding dimension — used to detect model changes at load time. */
+    vectorDim?: number;
     entries: Array<{
         chunk: TextChunk;
         vector: number[];
