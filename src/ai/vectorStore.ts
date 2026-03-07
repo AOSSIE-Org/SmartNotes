@@ -121,7 +121,15 @@ export class VectorStore {
         if (!existsSync(filePath)) return false;
 
         const raw = await readFile(filePath, "utf-8");
-        const data: SerializedVectorStore = JSON.parse(raw);
+        let data: SerializedVectorStore;
+        try {
+            data = JSON.parse(raw);
+        } catch {
+            throw new Error(
+                `VectorStore: failed to parse index file "${filePath}". ` +
+                `The file may be corrupted — delete it to rebuild the index.`,
+            );
+        }
 
         if (data.version !== CURRENT_VERSION) {
             console.warn(

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { mkdtemp, rm, readFile } from "node:fs/promises";
+import { mkdtemp, rm, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { VectorStore, cosineSimilarity } from "../vectorStore.js";
@@ -178,6 +178,11 @@ describe("VectorStore", () => {
 
         it("returns false when no file exists", async () => {
             expect(await store.load()).toBe(false);
+        });
+
+        it("throws a descriptive error on corrupted index file", async () => {
+            await writeFile(join(tempDir, "test-index.json"), "not valid json", "utf-8");
+            await expect(store.load()).rejects.toThrow("VectorStore: failed to parse index file");
         });
 
         it("skips write when nothing changed", async () => {
