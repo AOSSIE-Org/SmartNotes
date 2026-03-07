@@ -60,3 +60,20 @@ export const DEFAULT_SEARCH_OPTIONS: SearchOptions = {
     topK: 10,
     minScore: 0.3,
 };
+
+export interface HybridSearchOptions extends SearchOptions {
+    /** Weight for the semantic (vector) ranked list in RRF. */
+    semanticWeight: number;
+    /** Weight for the keyword (BM25) ranked list in RRF. */
+    keywordWeight: number;
+    /** RRF smoothing constant. Higher values reduce the impact of rank differences. */
+    rrfK: number;
+}
+
+export const DEFAULT_HYBRID_SEARCH_OPTIONS: HybridSearchOptions = {
+    topK: 10,
+    minScore: 0.3,
+    semanticWeight: 1.0,
+    keywordWeight: 1.0,
+    rrfK: 60,
+};
