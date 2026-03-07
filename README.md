@@ -157,6 +157,21 @@ TODO: Add user flow diagrams showing how users interact with your application
 [User Flow Diagram Placeholder]
 ```
 
+---
+
+## 🧠 AI Architecture
+
+SmartNotes is intended to be a **desktop, local‑first** application with AI features that are:
+
+- **Offline‑by‑default**
+- **Privacy‑first**
+- **Modular and swappable**
+- **Desktop‑only (no mandatory SaaS backend)**
+
+For details on how chunking, embeddings, hybrid retrieval, and the knowledge‑graph layer should be structured, see:
+
+- [`docs/ai-architecture.md`](docs/ai-architecture.md)
+
 ### Key User Journeys
 
 TODO: Document main user flows:
