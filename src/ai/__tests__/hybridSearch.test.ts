@@ -65,7 +65,7 @@ describe("reciprocalRankFusion", () => {
         );
         const n2 = fused.find((r) => r.chunk.noteId === "n2")!;
         const n1 = fused.find((r) => r.chunk.noteId === "n1")!;
-        expect(n2.score).toBeGreaterThan(n1.score);
+        expect(n2.fusionScore).toBeGreaterThan(n1.fusionScore);
     });
 
     it("includes items from disjoint lists", () => {

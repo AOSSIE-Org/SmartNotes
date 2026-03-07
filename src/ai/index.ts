@@ -20,6 +20,7 @@ export type {
     TextChunk,
     EmbeddedChunk,
     SearchResult,
+    HybridSearchResult,
     EmbeddingConfig,
     VectorStoreConfig,
     SearchOptions,

@@ -15,8 +15,13 @@ export interface EmbeddedChunk {
 
 export interface SearchResult {
     chunk: TextChunk;
-    /** Cosine similarity score (-1 to 1; typically >= 0 for normalized embeddings). */
+    /** Cosine similarity in [-1, 1] for semantic results; BM25 score for keyword results. */
     score: number;
+}
+
+export interface HybridSearchResult extends SearchResult {
+    /** RRF-derived rank fusion score. Use this for ranking; not comparable to cosine similarity. */
+    fusionScore: number;
 }
 
 export interface EmbeddingConfig {
@@ -72,7 +77,7 @@ export interface HybridSearchOptions extends SearchOptions {
 
 export const DEFAULT_HYBRID_SEARCH_OPTIONS: HybridSearchOptions = {
     topK: 10,
-    minScore: 0.3,
+    minScore: 0, // RRF handles relevance ranking; cosine thresholding doesn't apply here
     semanticWeight: 1.0,
     keywordWeight: 1.0,
     rrfK: 60,

@@ -1,4 +1,4 @@
-import type { TextChunk, SearchResult, HybridSearchOptions } from "./types.js";
+import type { TextChunk, SearchResult, HybridSearchResult, HybridSearchOptions } from "./types.js";
 import { DEFAULT_HYBRID_SEARCH_OPTIONS } from "./types.js";
 import { SemanticSearchService, defaultChunker } from "./semanticSearch.js";
 import type { ChunkFn } from "./semanticSearch.js";
@@ -7,8 +7,8 @@ import { KeywordSearchEngine } from "./keywordSearch.js";
 export function reciprocalRankFusion(
     rankedLists: Array<{ results: SearchResult[]; weight: number }>,
     k: number = 60,
-): SearchResult[] {
-    const fused = new Map<string, { chunk: TextChunk; score: number }>();
+): HybridSearchResult[] {
+    const fused = new Map<string, { chunk: TextChunk; score: number; fusionScore: number }>();
 
     for (const { results, weight } of rankedLists) {
         for (let rank = 0; rank < results.length; rank++) {
@@ -17,16 +17,20 @@ export function reciprocalRankFusion(
 
             const existing = fused.get(item.chunk.id);
             if (existing) {
-                existing.score += rrfScore;
+                existing.fusionScore += rrfScore;
             } else {
-                fused.set(item.chunk.id, { chunk: item.chunk, score: rrfScore });
+                fused.set(item.chunk.id, {
+                    chunk: item.chunk,
+                    score: item.score,
+                    fusionScore: rrfScore,
+                });
             }
         }
     }
 
     return Array.from(fused.values())
-        .sort((a, b) => b.score - a.score)
-        .map(({ chunk, score }) => ({ chunk, score }));
+        .sort((a, b) => b.fusionScore - a.fusionScore)
+        .map(({ chunk, score, fusionScore }) => ({ chunk, score, fusionScore }));
 }
 
 export class HybridSearchService {
@@ -65,7 +69,7 @@ export class HybridSearchService {
     async search(
         query: string,
         options: Partial<HybridSearchOptions> = {},
-    ): Promise<SearchResult[]> {
+    ): Promise<HybridSearchResult[]> {
         const opts = { ...DEFAULT_HYBRID_SEARCH_OPTIONS, ...options };
         const broadK = opts.topK * 3;
 
