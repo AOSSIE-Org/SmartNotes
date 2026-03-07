@@ -27,7 +27,7 @@ export function defaultChunker(noteId: string, content: string): TextChunk[] {
 export class SemanticSearchService {
     private embeddingService: EmbeddingService;
     private vectorStore: VectorStore;
-    private chunkFn: ChunkFn;
+    private readonly _chunkFn: ChunkFn;
 
     constructor(
         embeddingService: EmbeddingService,
@@ -36,7 +36,11 @@ export class SemanticSearchService {
     ) {
         this.embeddingService = embeddingService;
         this.vectorStore = vectorStore;
-        this.chunkFn = chunkFn;
+        this._chunkFn = chunkFn;
+    }
+
+    get chunkFn(): ChunkFn {
+        return this._chunkFn;
     }
 
     /** Load embedding model + persisted index. Call before anything else. */
@@ -47,7 +51,7 @@ export class SemanticSearchService {
 
     /** Index a note. Replaces any previously indexed chunks for this noteId. */
     async indexNote(noteId: string, content: string): Promise<number> {
-        const chunks = this.chunkFn(noteId, content);
+        const chunks = this._chunkFn(noteId, content);
         if (chunks.length === 0) {
             this.vectorStore.removeByNoteId(noteId);
             return 0;

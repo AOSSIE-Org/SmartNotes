@@ -1,7 +1,6 @@
 import type { TextChunk, SearchResult, HybridSearchResult, HybridSearchOptions } from "./types.js";
 import { DEFAULT_HYBRID_SEARCH_OPTIONS } from "./types.js";
-import { SemanticSearchService, defaultChunker } from "./semanticSearch.js";
-import type { ChunkFn } from "./semanticSearch.js";
+import { SemanticSearchService } from "./semanticSearch.js";
 import { KeywordSearchEngine } from "./keywordSearch.js";
 
 export function reciprocalRankFusion(
@@ -36,16 +35,13 @@ export function reciprocalRankFusion(
 export class HybridSearchService {
     private semanticSearch: SemanticSearchService;
     private keywordEngine: KeywordSearchEngine;
-    private chunkFn: ChunkFn;
 
     constructor(
         semanticSearch: SemanticSearchService,
         keywordEngine: KeywordSearchEngine,
-        chunkFn: ChunkFn = defaultChunker,
     ) {
         this.semanticSearch = semanticSearch;
         this.keywordEngine = keywordEngine;
-        this.chunkFn = chunkFn;
     }
 
     async initialize(): Promise<void> {
@@ -54,7 +50,7 @@ export class HybridSearchService {
 
     async indexNote(noteId: string, content: string): Promise<number> {
         const chunkCount = await this.semanticSearch.indexNote(noteId, content);
-        const chunks = this.chunkFn(noteId, content);
+        const chunks = this.semanticSearch.chunkFn(noteId, content);
         this.keywordEngine.removeByNoteId(noteId);
         this.keywordEngine.indexChunks(chunks);
         return chunkCount;
