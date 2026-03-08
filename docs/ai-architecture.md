@@ -1,4 +1,4 @@
-## AI Architecture for SmartNotes
+# AI Architecture for SmartNotes
 
 This document describes how AI components should be designed and integrated into SmartNotes so that the app remains **offline‑first**, **privacy‑preserving**, and **modular**, while scaling to large local note collections.
 
@@ -28,6 +28,7 @@ flowchart LR
   VecIdx --> Sem
 
   Fuse --> UI_Search[Search bar & results]
+  Fuse -.->|optional| Assist["AI assistant (opt-in)"]
   KG --> UI_Related[Related notes / graph view]
 ```
 
@@ -41,6 +42,7 @@ Conceptually:
   - Run **semantic search** over embeddings.
   - Combine both via **hybrid retrieval** (e.g. Reciprocal Rank Fusion).
 - A **knowledge‑graph layer** uses wiki‑links and backlinks for related‑note discovery and visual graph exploration.
+- An **optional AI assistant layer** can consume retrieved chunks as context for generation (e.g. summarisation, Q&A). This path is strictly opt‑in, must never require a network connection by default, and must be easy to disable without affecting search or graph features.
 
 All of this must run **inside the desktop app**, without requiring a network connection.
 
