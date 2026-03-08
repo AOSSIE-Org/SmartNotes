@@ -179,7 +179,7 @@ The hybrid layer should not depend on the concrete implementations of keyword/se
 
 Responsibilities:
 
-- Parse wiki‑style links (e.g. `[[Note]]`, `[[Note|Alias]]`) from markdown.
+- Parse wiki‑style links (e.g. `[[Note]]`, `[[Note|Alias]]`) from Markdown.
 - Build a graph of relationships between notes (edges, backlinks, neighborhoods).
 - Provide data needed for:
   - Related‑note suggestions.
