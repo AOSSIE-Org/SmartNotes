@@ -15,7 +15,8 @@ flowchart LR
   Notes[Notes on disk] --> Parse[Markdown parsing]
   Parse --> Chunk[Chunking]
   Chunk --> Embed[Embedding]
-  Embed --> Index[Indexing]
+  Embed --> VecIdx[Vector index]
+  Chunk --> KwIdx[Keyword index]
   Notes --> KG[Wiki‑links & graph]
 
   subgraph Retrieval[Retrieval]
@@ -23,8 +24,8 @@ flowchart LR
     Sem[Semantic search] --> Fuse
   end
 
-  Index --> KW
-  Index --> Sem
+  KwIdx --> KW
+  VecIdx --> Sem
 
   Fuse --> UI_Search[Search bar & results]
   KG --> UI_Related[Related notes / graph view]
@@ -117,8 +118,8 @@ Conceptual contract:
 
 Constraints:
 
-- Default implementation should use a **local embedding model** (e.g. via a JS/TS transformer library), not a remote API.
-- Alternative implementations (e.g. remote LLM) must be strictly optional.
+- Default implementation should use a **local embedding model** (e.g. via a JS/TS transformer library such as `@xenova/transformers`), not a remote API.
+- Alternative implementations (e.g. a remote embedding API such as OpenAI Embeddings or Cohere Embed) must be strictly optional and explicitly opt‑in.
 
 ### Indexing & vector store
 
@@ -129,7 +130,9 @@ Responsibilities:
 
 Conceptual contract:
 
-- `index(chunks, embeddings) → void`
+- `index(chunks, embeddings) → void` — add or update entries (idempotent by chunk ID).
+- `delete(noteId) → void` — remove all chunks belonging to a given note.
+- `upsert(noteId, chunks, embeddings) → void` — atomically replace all chunks for a note (preferred when a note is re‑chunked and the chunk count changes).
 - `searchByEmbedding(queryEmbedding, options) → RankedResults`
 
 Where `RankedResults` contains:
