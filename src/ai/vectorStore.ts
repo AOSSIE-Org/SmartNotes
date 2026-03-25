@@ -26,6 +26,21 @@ export class VectorStore {
 
     /** Add chunks. Overwrites existing entries with the same ID. */
     add(embeddedChunks: EmbeddedChunk[]): void {
+        if (embeddedChunks.length === 0) return;
+
+        const expectedDim =
+            this.entries.values().next().value?.vector.length ??
+            embeddedChunks[0].vector.length;
+
+        for (const ec of embeddedChunks) {
+            if (ec.vector.length !== expectedDim) {
+                throw new Error(
+                    `VectorStore: expected ${expectedDim}-dim vectors, ` +
+                    `got ${ec.vector.length} for chunk "${ec.chunk.id}".`,
+                );
+            }
+        }
+
         for (const ec of embeddedChunks) {
             this.entries.set(ec.chunk.id, ec);
         }

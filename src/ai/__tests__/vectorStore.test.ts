@@ -235,4 +235,19 @@ describe("VectorStore", () => {
             expect(store.size).toBe(0);
         });
     });
+
+    describe("dimension validation", () => {
+        it("rejects mismatched vector on subsequent insert", () => {
+            store.add([makeChunk("n1", 0, [1, 0, 0])]);
+            expect(() => store.add([makeChunk("n2", 0, [1, 0])]))
+                .toThrow("VectorStore: expected 3-dim vectors");
+        });
+
+        it("rejects mismatched dimension within a single batch", () => {
+            expect(() => store.add([
+                makeChunk("n1", 0, [1, 0, 0]),
+                makeChunk("n2", 0, [1, 0]),
+            ])).toThrow("VectorStore: expected 3-dim vectors");
+        });
+    });
 });
