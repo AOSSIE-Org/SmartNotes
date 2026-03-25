@@ -87,6 +87,9 @@ export class EmbeddingService {
 
     async embedSingle(text: string): Promise<number[]> {
         const results = await this.embed([text]);
+        if (results.length === 0) {
+            throw new Error("Embedding returned no results");
+        }
         return results[0];
     }
 
