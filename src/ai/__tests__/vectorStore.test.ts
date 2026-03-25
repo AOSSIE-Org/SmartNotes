@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { mkdtemp, rm, readFile, writeFile } from "node:fs/promises";
+import { mkdtemp, rm, readFile, writeFile, stat } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { VectorStore, cosineSimilarity } from "../vectorStore.js";
@@ -188,15 +188,12 @@ describe("VectorStore", () => {
         it("skips write when nothing changed", async () => {
             store.add([makeChunk("n1", 0, [1, 0, 0])]);
             await store.save();
-            await store.save(); // second save should be no-op
 
-            const content = await readFile(
-                join(tempDir, "test-index.json"),
-                "utf-8",
-            );
-            const data = JSON.parse(content);
-            expect(data.version).toBe(1);
-            expect(data.entries).toHaveLength(1);
+            const before = await stat(join(tempDir, "test-index.json"));
+            await store.save();
+            const after = await stat(join(tempDir, "test-index.json"));
+
+            expect(after.mtimeMs).toBe(before.mtimeMs);
         });
 
         it("creates directories recursively", async () => {
