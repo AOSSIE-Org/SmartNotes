@@ -220,6 +220,10 @@ export class VectorStore {
         return chunks;
     }
 
+    getAllChunks(): TextChunk[] {
+        return Array.from(this.entries.values()).map((e) => e.chunk);
+    }
+
     clear(): void {
         this.entries.clear();
         this.dirty = true;

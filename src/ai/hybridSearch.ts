@@ -46,6 +46,7 @@ export class HybridSearchService {
 
     async initialize(): Promise<void> {
         await this.semanticSearch.initialize();
+        this.rebuildKeywordIndex();
     }
 
     async indexNote(noteId: string, content: string): Promise<number> {
@@ -99,5 +100,13 @@ export class HybridSearchService {
 
     get indexSize(): number {
         return this.semanticSearch.indexSize;
+    }
+
+    private rebuildKeywordIndex(): void {
+        this.keywordEngine.clear();
+        const chunks = this.semanticSearch.getAllChunks();
+        if (chunks.length > 0) {
+            this.keywordEngine.indexChunks(chunks);
+        }
     }
 }

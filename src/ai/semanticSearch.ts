@@ -123,6 +123,10 @@ export class SemanticSearchService {
         return this.vectorStore.hasNote(noteId);
     }
 
+    getAllChunks(): TextChunk[] {
+        return this.vectorStore.getAllChunks();
+    }
+
     private getAllChunksForNote(noteId: string): TextChunk[] {
         return this.vectorStore.getChunksByNoteId(noteId);
     }
