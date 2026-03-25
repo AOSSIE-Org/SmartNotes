@@ -76,17 +76,15 @@ export class HybridSearchService {
                 minScore: 0,
                 noteId: opts.noteId,
             }),
-            Promise.resolve(this.keywordEngine.search(query, broadK)),
+            Promise.resolve(
+                this.keywordEngine.search(query, broadK, opts.noteId),
+            ),
         ]);
-
-        const filteredKeyword = opts.noteId
-            ? keywordResults.filter((r) => r.chunk.noteId === opts.noteId)
-            : keywordResults;
 
         const fused = reciprocalRankFusion(
             [
                 { results: semanticResults, weight: opts.semanticWeight },
-                { results: filteredKeyword, weight: opts.keywordWeight },
+                { results: keywordResults, weight: opts.keywordWeight },
             ],
             opts.rrfK,
         );
