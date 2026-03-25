@@ -79,7 +79,7 @@ export class KeywordSearchEngine {
         return toRemove.length;
     }
 
-    search(query: string, topK: number = 10): SearchResult[] {
+    search(query: string, topK: number = 10, noteId?: string): SearchResult[] {
         const queryTerms = tokenize(query);
         if (queryTerms.length === 0 || this.docs.size === 0) return [];
 
@@ -95,6 +95,8 @@ export class KeywordSearchEngine {
 
             for (const docId of posting) {
                 const doc = this.docs.get(docId)!;
+                if (noteId && doc.chunk.noteId !== noteId) continue;
+
                 const tf = doc.termFreqs.get(term) ?? 0;
                 const numerator = tf * (K1 + 1);
                 const denominator = tf + K1 * (1 - B + B * (doc.length / this.avgDocLength));
