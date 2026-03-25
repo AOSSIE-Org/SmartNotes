@@ -250,4 +250,15 @@ describe("VectorStore", () => {
             ])).toThrow("VectorStore: expected 3-dim vectors");
         });
     });
+
+    describe("structural validation on load", () => {
+        it("rejects index with non-array entries field", async () => {
+            await writeFile(
+                join(tempDir, "test-index.json"),
+                JSON.stringify({ version: 1, entries: "not an array" }),
+                "utf-8",
+            );
+            await expect(store.load()).rejects.toThrow("invalid index structure");
+        });
+    });
 });

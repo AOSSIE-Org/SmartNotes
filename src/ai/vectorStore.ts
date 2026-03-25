@@ -171,6 +171,13 @@ export class VectorStore {
             }
         }
 
+        if (!Array.isArray(data.entries)) {
+            throw new Error(
+                `VectorStore: invalid index structure in "${filePath}". ` +
+                `Delete it to rebuild.`,
+            );
+        }
+
         this.entries.clear();
         for (const entry of data.entries) {
             this.entries.set(entry.chunk.id, {
