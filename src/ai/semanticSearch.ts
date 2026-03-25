@@ -89,14 +89,12 @@ export class SemanticSearchService {
     async findRelatedNotes(
         noteId: string,
         topK: number = 5,
+        minScore: number = 0.4,
     ): Promise<SearchResult[]> {
-        // Map keeps the highest-scoring chunk per note — the old Set approach
-        // kept the first hit, which could discard a better score from a later
-        // source chunk iteration.
         const bestByNoteId = new Map<string, SearchResult>();
 
         for (const entry of this.getAllChunksForNote(noteId)) {
-            const related = this.vectorStore.findRelated(entry.id, topK * 2, 0.4);
+            const related = this.vectorStore.findRelated(entry.id, topK * 2, minScore);
             for (const result of related) {
                 if (result.chunk.noteId === noteId) continue;
                 const existing = bestByNoteId.get(result.chunk.noteId);
