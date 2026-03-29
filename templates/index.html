@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Notes MVP</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <img src="{{ url_for('static', filename='images/logo-icon.svg') }}" class="icon">
+        <h1>Smart Notes</h1>
+    </div>
+
+    <!-- ADD NOTE -->
+    <div class="section">
+        <h2>Add Note</h2>
+        <form method="POST">
+            <textarea name="note" placeholder="Write your note here..."></textarea>
+            <button type="submit">Save Note</button>
+        </form>
+    </div>
+
+    <!-- ASK QUESTION -->
+    <div class="section">
+        <h2>Ask Question</h2>
+        <form method="POST">
+            <input type="text" name="question" placeholder="Ask something about your notes...">
+            <button type="submit">Ask</button>
+        </form>
+
+        <h3>Answer:</h3>
+        <pre>{{ answer }}</pre>
+    </div>
+
+    <!-- SUMMARIZE NOTES -->
+    <div class="section">
+        <h2>Summarize Notes</h2>
+        <form method="POST">
+            <button type="submit" name="summarize">Generate Summary</button>
+        </form>
+
+        <h3>Summary:</h3>
+        <pre>{{ summary }}</pre>
+    </div>
+
+    <!-- ALL NOTES -->
+    <div class="section">
+        <h3>All Notes</h3>
+        {% if notes %}
+        <ul>
+            {% for note in notes %}
+                <li>{{ note }}</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No notes added yet.</p>
+        {% endif %}
+    </div>
+
+    <!-- RELATED NOTES -->
+    <div class="section">
+        <h3>Related Notes</h3>
+        {% if links %}
+        <ul>
+            {% for link in links %}
+                <li>{{ link }}</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No related notes found.</p>
+        {% endif %}
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <p>Powered by AOSSIE</p>
+        <img src="{{ url_for('static', filename='images/aossie-logo.svg') }}" class="aossie-logo">
+    </div>
+
+</div>
+
+</body>
+</html>

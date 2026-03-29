@@ -1,0 +1,121 @@
+/* Reset */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to right, #eef2f7, #f8fafc);
+    margin: 0;
+    padding: 0;
+}
+
+/* Container */
+.container {
+    width: 85%;
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Header */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.main-logo {
+    height: 50px;
+}
+
+.icon {
+    height: 28px;
+}
+
+/* Title */
+h1 {
+    text-align: center;
+    color: #222;
+}
+
+/* Sections */
+.section {
+    background: white;
+    padding: 18px;
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease;
+}
+
+.section:hover {
+    transform: translateY(-2px);
+}
+
+/* Textarea */
+textarea {
+    width: 100%;
+    height: 90px;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    resize: none;
+}
+
+/* Input */
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+/* Button */
+button {
+    margin-top: 10px;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #0056b3, #003f88);
+}
+
+/* Lists */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    background: #eef3f9;
+    padding: 10px;
+    margin: 6px 0;
+    border-radius: 6px;
+}
+
+/* Output blocks */
+pre {
+    background: #f1f5f9;
+    padding: 12px;
+    border-radius: 6px;
+    white-space: pre-wrap;
+}
+
+/* Footer */
+.footer {
+    margin-top: 40px;
+    text-align: center;
+    opacity: 0.8;
+}
+
+.aossie-logo {
+    height: 40px;
+    margin-top: 10px;
+}
