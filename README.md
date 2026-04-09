@@ -4,7 +4,7 @@
 <!-- Organization Logo -->
 <div align="center" style="display: flex; align-items: center; justify-content: center; gap: 16px;">
   <img alt="AOSSIE" src="public/aossie-logo.svg" width="175">
-  <img src="public/todo-project-logo.svg" width="175" />
+  <img src="public/logo-full.svg" width="175" />
 </div>
 
 &nbsp;
@@ -12,9 +12,7 @@
 <!-- Organization Name -->
 <div align="center">
 
-[![Static Badge](https://img.shields.io/badge/aossie.org/TODO-228B22?style=for-the-badge&labelColor=FFC517)](https://TODO.aossie.org/)
-
-<!-- Correct deployed url to be added -->
+[![Static Badge](https://img.shields.io/badge/AOSSIE-SmartNotes-228B22?style=for-the-badge&labelColor=FFC517)](https://github.com/AOSSIE-Org/SmartNotes)
 
 </div>
 
@@ -48,202 +46,170 @@
 ---
 
 <div align="center">
-<h1>TODO: Project Name</h1>
+<h1>SmartNotes</h1>
 </div>
 
-[TODO](https://TODO.stability.nexus/) is a ... TODO: Project Description.
+**SmartNotes** is a local-first, privacy-focused desktop application for knowledge management. All AI runs on your machine — no API keys, no cloud, no data leaving your device. Write, search, and ask questions about your notes entirely offline.
 
 ---
 
 ## 🚀 Features
 
-TODO: List your main features here:
-
-- **Feature 1**: Description
-- **Feature 2**: Description
-- **Feature 3**: Description
-- **Feature 4**: Description
+- **Rich Text Editor**: Full-featured editor powered by TipTap with slash commands, wikilinks (`[[Note Title]]`), headings, code blocks, and tables
+- **Semantic Search**: Search your notes by meaning, not just keywords — powered by local sentence-transformer embeddings (Transformers.js + WASM)
+- **RAG-based Q&A**: Ask questions and get answers grounded in your notes using a local LLM via Ollama — no internet required
+- **Knowledge Graph**: Automatic note linking and a visual force-directed graph showing how your notes connect
+- **Import/Export**: Full compatibility with Markdown files and Obsidian vaults — bring your existing notes in, export anytime
 
 ---
 
 ## 💻 Tech Stack
 
-TODO: Update based on your project
+### Desktop Shell
+- [Electron](https://electronjs.org/) — cross-platform desktop application
+- [React](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/) — renderer UI
+- [Vite](https://vitejs.dev/) — fast dev server and bundler
 
-### Frontend
-- React / Next.js / Flutter / React Native
-- TypeScript
-- TailwindCSS
+### Editor
+- [TipTap](https://tiptap.dev/) — headless rich-text editor built on ProseMirror
 
-### Backend
-- Flask / FastAPI / Node.js / Supabase
-- Database: PostgreSQL / SQLite / MongoDB
+### AI / Search
+- [Transformers.js](https://huggingface.co/docs/transformers.js) — sentence-transformer embeddings in WebAssembly (no Python)
+- [Ollama](https://ollama.com/) — local LLM inference (llama3.2, phi3, mistral)
+- [LlamaIndex.TS](https://ts.llamaindex.ai/) — RAG orchestration
 
-### AI/ML (if applicable)
-- LangChain / LangGraph / LlamaIndex
-- Google Gemini / OpenAI / Anthropic Claude
-- Vector Database: Weaviate / Pinecone / Chroma
-- RAG / Prompt Engineering / Agent Frameworks
+### Storage
+- [SQLite](https://sqlite.org/) — all notes, metadata, and tags
+- [sqlite-vec](https://github.com/asg017/sqlite-vec) — vector similarity search directly in SQLite
 
-### Blockchain (if applicable)
-- Solidity / solana / cardano / ergo Smart Contracts
-- Hardhat / Truffle / foundry
-- Web3.js / Ethers.js / Wagmi
-- OpenZeppelin / alchemy / Infura
+### Visualization
+- [D3.js](https://d3js.org/) — force-directed knowledge graph
+
+### Packaging & Testing
+- [Electron Forge](https://www.electronforge.io/) — cross-platform builds (.exe, .dmg, .deb, .rpm)
+- [Vitest](https://vitest.dev/) — unit and integration tests
+- [Playwright](https://playwright.dev/) — end-to-end tests
 
 ---
 
 ## ✅ Project Checklist
 
-TODO: Complete applicable items based on your project type
-
-- [ ] **The protocol** (if applicable):
-   - [ ] has been described and formally specified in a paper.
-   - [ ] has had its main properties mathematically proven.
-   - [ ] has been formally verified.
-- [ ] **The smart contracts** (if applicable):
-   - [ ] were thoroughly reviewed by at least two knights of The Stable Order.
-   - [ ] were deployed to: [Add deployment details]
-- [ ] **The mobile app** (if applicable):
-   - [ ] has an _About_ page containing the Stability Nexus's logo and pointing to the social media accounts of the Stability Nexus.
-   - [ ] is available for download as a release in this repo.
-   - [ ] is available in the relevant app stores.
-- [ ] **The AI/ML components** (if applicable):
-   - [ ] LLM/model selection and configuration are documented.
-   - [ ] Prompts and system instructions are version-controlled.
-   - [ ] Content safety and moderation mechanisms are implemented.
-   - [ ] API keys and rate limits are properly managed.
+- [x] **AI/ML components**:
+   - [x] LLM/model selection documented (Ollama with llama3.2/phi3/mistral)
+   - [x] Embeddings run fully locally via Transformers.js WASM
+   - [x] No API keys required — fully offline
+   - [ ] Content moderation for generated responses (planned)
 
 ---
 
 ## 🔗 Repository Links
 
-TODO: Update with your repository structure
-
-1. [Main Repository](https://github.com/AOSSIE-Org/TODO)
-2. [Frontend](https://github.com/AOSSIE-Org/TODO/tree/main/frontend) (if separate)
-3. [Backend](https://github.com/AOSSIE-Org/TODO/tree/main/backend) (if separate)
+1. [Main Repository](https://github.com/AOSSIE-Org/SmartNotes)
+2. [Issue Tracker](https://github.com/AOSSIE-Org/SmartNotes/issues)
+3. [GSoC 2026 Project Ideas](https://github.com/AOSSIE-Org/Info/blob/main/GSoC-Ideas/2026/index.md)
 
 ---
 
 ## 🏗️ Architecture Diagram
 
-TODO: Add your system architecture diagram here
-
 ```
-[Architecture Diagram Placeholder]
+┌─────────────────────────────────────────────────┐
+│                  Electron App                    │
+│                                                  │
+│  ┌──────────────┐      ┌──────────────────────┐  │
+│  │ Main Process │      │  Renderer Process    │  │
+│  │              │ IPC  │                      │  │
+│  │ SQLite DB    │◄────►│  TipTap Editor       │  │
+│  │ File System  │      │  Search Bar          │  │
+│  │ Ollama Mgr   │      │  Q&A Sidebar         │  │
+│  └──────────────┘      │  Knowledge Graph     │  │
+│                        │                      │  │
+│                        │  ┌────────────────┐  │  │
+│                        │  │  Web Worker    │  │  │
+│                        │  │ Transformers.js│  │  │
+│                        │  │ (WASM embeds)  │  │  │
+│                        │  └────────────────┘  │  │
+│                        └──────────────────────┘  │
+└─────────────────────────────────────────────────┘
+                          │
+                    localhost:11434
+                          │
+                 ┌─────────────────┐
+                 │  Ollama Daemon  │
+                 │  llama3.2/phi3  │
+                 └─────────────────┘
 ```
-
-You can create architecture diagrams using:
-- [Draw.io](https://draw.io)
-- [Excalidraw](https://excalidraw.com)
-- [Lucidchart](https://lucidchart.com)
-- [Mermaid](https://mermaid.js.org) (for code-based diagrams)
-
-Example structure to include:
-- Frontend components
-- Backend services
-- Database architecture
-- External APIs/services
-- Data flow between components
 
 ---
 
 ## 🔄 User Flow
 
-TODO: Add user flow diagrams showing how users interact with your application
-
-```
-[User Flow Diagram Placeholder]
-```
-
 ### Key User Journeys
 
-TODO: Document main user flows:
+1. **Writing a Note**
+   - Open SmartNotes → click New Note
+   - Type with rich formatting, use `/` for slash commands
+   - Use `[[` to link to another note (builds the knowledge graph automatically)
+   - Note is saved and embedded in the background
 
-1. **User Journey 1**: Description
-   - Step 1
-   - Step 2
-   - Step 3
+2. **Semantic Search**
+   - Press `Ctrl+K` or click the search bar
+   - Type a query in natural language
+   - Results ranked by meaning + keyword relevance (hybrid BM25 + vector search)
 
-2. **User Journey 2**: Description
-   - Step 1
-   - Step 2
-   - Step 3
-
-3. **User Journey 3**: Description
-   - Step 1
-   - Step 2
-   - Step 3
+3. **Q&A over Notes**
+   - Open the Q&A sidebar
+   - Type a question like "What did I write about neural networks?"
+   - SmartNotes retrieves relevant note chunks and sends them to your local LLM
+   - Answer streams back with source citations linking to specific notes
 
 ---
 
-## �🍀 Getting Started
+## 🍀 Getting Started
 
 ### Prerequisites
 
-TODO: List what developers need installed
-
-- Node.js 18+ / Python 3.9+ / Flutter SDK
-- npm / yarn / pnpm
-- [Any specific tools or accounts needed]
+- [Node.js](https://nodejs.org/) v18 or higher
+- [npm](https://www.npmjs.com/) v9 or higher
+- [Git](https://git-scm.com/)
+- [Ollama](https://ollama.com/) (optional — only needed for Q&A feature)
 
 ### Installation
-
-TODO: Provide detailed setup instructions
 
 #### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/AOSSIE-Org/TODO.git
-cd TODO
+git clone https://github.com/AOSSIE-Org/SmartNotes.git
+cd SmartNotes
 ```
 
 #### 2. Install Dependencies
 
 ```bash
 npm install
-# or
-yarn install
-# or
-pnpm install
 ```
 
-#### 3. Configure Environment Variables(.env.example)
-
-Create a `.env` file in the root directory:
-
-```env
-# Add your environment variables here
-API_KEY=your_api_key
-DATABASE_URL=your_database_url
-```
-
-#### 4. Run the Development Server
+#### 3. Run the Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-#### 5. Open your Browser
+#### 4. (Optional) Install Ollama for Q&A
 
-Navigate to [http://localhost:3000](http://localhost:3000) to see the application.
+Download Ollama from [ollama.com](https://ollama.com/), then pull a model:
 
-For detailed setup instructions, please refer to our [Installation Guide](./docs/INSTALL_GUIDE.md) (if you have one).
+```bash
+ollama pull llama3.2
+```
+
+SmartNotes will detect Ollama automatically on startup.
 
 ---
 
 ## 📱 App Screenshots
 
-TODO: Add screenshots showcasing your application
-
-|  |  |  |
-|---|---|---|
-| Screenshot 1 | Screenshot 2 | Screenshot 3 |
+> Screenshots will be added as the application UI is built.
 
 ---
 
@@ -251,16 +217,16 @@ TODO: Add screenshots showcasing your application
 
 ⭐ Don't forget to star this repository if you find it useful! ⭐
 
-Thank you for considering contributing to this project! Contributions are highly appreciated and welcomed. To ensure smooth collaboration, please refer to our [Contribution Guidelines](./CONTRIBUTING.md).
+Thank you for considering contributing to SmartNotes! Contributions are highly appreciated and welcomed. To ensure smooth collaboration, please refer to our [Contribution Guidelines](./CONTRIBUTING.md).
+
+**Important**: All project communication happens on [Discord](https://discord.gg/hjUhu33uAn). Post your PR updates there for faster review.
 
 ---
 
 ## ✨ Maintainers
 
-TODO: Add maintainer information
-
-- [Maintainer Name](https://github.com/username)
-- [Maintainer Name](https://github.com/username)
+- [@SharkyBytes](https://github.com/SharkyBytes)
+- [@yatikakain](https://github.com/yatikakain)
 
 ---
 
@@ -273,8 +239,8 @@ See the [LICENSE](LICENSE) file for details.
 
 ## 💪 Thanks To All Contributors
 
-Thanks a lot for spending your time helping TODO grow. Keep rocking 🥂
+Thanks a lot for spending your time helping SmartNotes grow. Keep rocking 🥂
 
-[![Contributors](https://contrib.rocks/image?repo=AOSSIE-Org/TODO)](https://github.com/AOSSIE-Org/TODO/graphs/contributors)
+[![Contributors](https://contrib.rocks/image?repo=AOSSIE-Org/SmartNotes)](https://github.com/AOSSIE-Org/SmartNotes/graphs/contributors)
 
-© 2025 AOSSIE 
+© 2025 AOSSIE
